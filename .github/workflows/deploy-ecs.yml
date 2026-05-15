@@ -21,6 +21,33 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify GitHub configuration
+        run: |
+          set -euo pipefail
+          missing=0
+          check() {
+            name="$1"
+            value="$2"
+            kind="$3"
+            if [ -z "${value}" ]; then
+              echo "::error::Missing ${kind} '${name}'. Add it under Settings → Secrets and variables → Actions → ${kind}s."
+              missing=1
+            fi
+          }
+          check "AWS_ROLE_TO_ASSUME" "${{ secrets.AWS_ROLE_TO_ASSUME }}" "Secret"
+          check "AWS_REGION" "${{ vars.AWS_REGION }}" "Variable"
+          check "ECR_REPOSITORY" "${{ vars.ECR_REPOSITORY }}" "Variable"
+          check "ECS_CLUSTER_NAME" "${{ vars.ECS_CLUSTER_NAME }}" "Variable"
+          check "ECS_SERVICE_NAME" "${{ vars.ECS_SERVICE_NAME }}" "Variable"
+          if [ "${missing}" -ne 0 ]; then
+            echo ""
+            echo "Fill values from terraform output, then create them in THIS repo (where the workflow runs):"
+            echo "  Secret:  AWS_ROLE_TO_ASSUME"
+            echo "  Variables: AWS_REGION, ECR_REPOSITORY, ECS_CLUSTER_NAME, ECS_SERVICE_NAME"
+            echo "See .github/github-actions.env.example in the Terraform repo for a checklist."
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 

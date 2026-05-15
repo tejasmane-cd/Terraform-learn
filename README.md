@@ -75,6 +75,10 @@ In the repo that contains your **Dockerfile** and app code:
 
 **First deploy:** Until at least one image exists in ECR, ECS tasks may fail to start. Run the workflow once (or `docker push` manually) after `terraform apply`.
 
+### Workflow failed: `Input required and not supplied: aws-region`
+
+That means **`AWS_REGION` is not set as a repository Variable** in the repo where the workflow runs (empty `vars.AWS_REGION`). Add all five items from `.github/github-actions.env.example` in **Settings → Secrets and variables → Actions** — one **Secret** and four **Variables** (not secrets). Values come from `terraform output` after `terraform apply`.
+
 ## Module layout
 
 | Module          | Responsibility                                                |
