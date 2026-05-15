@@ -1,0 +1,24 @@
+# Local overrides (do not commit secrets). Copy to terraform.tfvars and edit.
+aws_region   = "us-east-1"
+name_prefix  = "myapp"
+
+# Required for GitHub OIDC trust string: repo:ORG/REPO:ref:refs/heads/BRANCH
+github_org    = "your-github-org-or-username"
+github_repo   = "your-application-repo"
+github_branch = "main"
+
+# Optional: HTTPS on ALB port 443 (must be in the same region as the ALB)
+# acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+container_port     = 3000
+health_check_path  = "/"
+ecs_cpu            = 256
+ecs_memory         = 512
+ecs_desired_count  = 1
+
+# Set false if IAM already has GitHub's OIDC provider for this account
+# create_github_oidc_provider = false
+
+tags = {
+  Environment = "dev"
+}

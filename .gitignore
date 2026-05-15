@@ -1,0 +1,16 @@
+# Local env files (never commit real credentials)
+.env
+.env.local
+.env.*.local
+
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.tfvars
+terraform.tfvars
+!terraform.tfvars.example
