@@ -14,9 +14,9 @@ variable "aws_region" {
   type = string
 }
 
-variable "ecr_repository_url" {
+variable "container_image" {
   type        = string
-  description = "Full ECR URL without tag (e.g. 123.dkr.ecr.us-east-1.amazonaws.com/myrepo)."
+  description = "Full container image URI including tag (e.g. 123.dkr.ecr.us-east-1.amazonaws.com/myapp-app:latest)."
 }
 
 variable "container_name" {

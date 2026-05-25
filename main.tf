@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2"
+    }
   }
 }
 
@@ -31,13 +35,6 @@ module "vpc" {
   tags        = var.tags
 }
 
-module "ecr" {
-  source = "./modules/ecr"
-
-  name_prefix = var.name_prefix
-  tags        = var.tags
-}
-
 module "alb" {
   source = "./modules/alb"
 
@@ -53,13 +50,13 @@ module "alb" {
 module "ecs" {
   source = "./modules/ecs"
 
-  depends_on = [module.alb]
+  depends_on = [module.alb, null_resource.push_app_image]
 
   name_prefix           = var.name_prefix
   vpc_id                = module.vpc.vpc_id
   private_subnet_ids    = module.vpc.private_subnet_ids
   aws_region            = var.aws_region
-  ecr_repository_url    = module.ecr.repository_url
+  container_image       = local.container_image
   container_port        = var.container_port
   cpu                   = var.ecs_cpu
   memory                = var.ecs_memory
@@ -67,16 +64,4 @@ module "ecs" {
   target_group_arn      = module.alb.target_group_arn
   alb_security_group_id = module.alb.security_group_id
   tags                  = var.tags
-}
-
-module "github_oidc" {
-  source = "./modules/github_oidc"
-
-  name_prefix          = var.name_prefix
-  github_org           = var.github_org
-  github_repo          = var.github_repo
-  github_branch        = var.github_branch
-  ecr_repository_arn   = module.ecr.repository_arn
-  create_oidc_provider = var.create_github_oidc_provider
-  tags                 = var.tags
 }

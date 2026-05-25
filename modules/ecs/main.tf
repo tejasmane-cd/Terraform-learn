@@ -68,10 +68,6 @@ resource "aws_security_group" "tasks" {
   tags = merge(var.tags, { Name = "${var.name_prefix}-ecs-tasks-sg" })
 }
 
-locals {
-  container_image = "${var.ecr_repository_url}:latest"
-}
-
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.name_prefix}-app"
   network_mode             = "awsvpc"
@@ -84,7 +80,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = var.container_name
-      image     = local.container_image
+      image     = var.container_image
       essential = true
       portMappings = [
         {

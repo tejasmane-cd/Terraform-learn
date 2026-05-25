@@ -1,23 +1,25 @@
-# Local overrides (do not commit secrets). Copy to terraform.tfvars and edit.
 aws_region   = "us-east-1"
-name_prefix  = "myapp"
+name_prefix  = "zomato"
 
-# Required for GitHub OIDC trust string: repo:ORG/REPO:ref:refs/heads/BRANCH
-github_org    = "your-github-org-or-username"
-github_repo   = "your-application-repo"
-github_branch = "main"
+# Your existing ECR repository (must already exist in this account/region)
+# Provide either the repo name or the full repository URL.
+ecr_repository_name = "zomato-app"
+# ecr_repository_url  = "123456789012.dkr.ecr.us-east-1.amazonaws.com/zomato-app"
+ecr_image_tag        = "latest"
 
-# Optional: HTTPS on ALB port 443 (must be in the same region as the ALB)
+# Optional: build from GitHub and push to that ECR on apply
+# app_github_repo       = "iamtejas23/zomato-clone"
+# app_github_ref        = "main"
+# build_and_push_image  = true
+
+# Optional: HTTPS on ALB port 443 (ACM cert in same region as ALB)
 # acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
-container_port     = 3000
-health_check_path  = "/"
-ecs_cpu            = 256
-ecs_memory         = 512
-ecs_desired_count  = 1
-
-# Set false if IAM already has GitHub's OIDC provider for this account
-# create_github_oidc_provider = false
+container_port    = 3000
+health_check_path = "/"
+ecs_cpu           = 256
+ecs_memory        = 512
+ecs_desired_count = 1
 
 tags = {
   Environment = "dev"

@@ -6,24 +6,44 @@ variable "aws_region" {
 
 variable "name_prefix" {
   type        = string
-  description = "Short unique prefix for naming (ECR, cluster, ALB, IAM)."
-  default     = "myapp"
+  description = "Short unique prefix for naming (cluster, ALB, IAM)."
+  default     = "zomato"
 }
 
-variable "github_org" {
+variable "ecr_repository_name" {
   type        = string
-  description = "GitHub organization or username for OIDC trust (repo:ORG/REPO)."
+  description = "Name of your existing ECR repository (not created by Terraform). Either this or ecr_repository_url must be provided."
+  default     = ""
 }
 
-variable "github_repo" {
+variable "ecr_repository_url" {
   type        = string
-  description = "Repository name (without org) for OIDC trust."
+  description = "Full existing ECR repository URL, e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com/zomato-app. Use this instead of ecr_repository_name if you already have the full URI."
+  default     = ""
 }
 
-variable "github_branch" {
+variable "ecr_image_tag" {
   type        = string
-  description = "Git branch allowed to assume the GitHub Actions deploy role."
+  description = "Image tag in ECR for the ECS task (e.g. latest)."
+  default     = "latest"
+}
+
+variable "app_github_repo" {
+  type        = string
+  description = "GitHub repository to clone and build (ORG/REPO)."
+  default     = "iamtejas23/zomato-clone"
+}
+
+variable "app_github_ref" {
+  type        = string
+  description = "Git branch or tag to build from zomato-clone."
   default     = "main"
+}
+
+variable "build_and_push_image" {
+  type        = bool
+  description = "On apply, clone zomato-clone, docker build, and push to existing ECR (needs git, docker, aws CLI). Set false if the image is already in ECR."
+  default     = false
 }
 
 variable "acm_certificate_arn" {
@@ -62,12 +82,6 @@ variable "ecs_desired_count" {
 variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"
-}
-
-variable "create_github_oidc_provider" {
-  type        = bool
-  description = "Create the GitHub OIDC provider in IAM. Set false if it already exists in this AWS account."
-  default     = true
 }
 
 variable "tags" {

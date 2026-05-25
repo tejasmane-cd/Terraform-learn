@@ -1,3 +1,7 @@
+output "container_image" {
+  value = var.container_image
+}
+
 output "cluster_name" {
   value = aws_ecs_cluster.this.name
 }
