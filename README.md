@@ -43,25 +43,6 @@ terraform state rm 'module.ecr.aws_ecr_repository.this' 2>/dev/null || true
 terraform state rm 'module.ecr.aws_ecr_lifecycle_policy.this' 2>/dev/null || true
 ```
 
-Or import is not needed — only drop state for resources you no longer manage here.
-
-## Variables
-
-| Variable | Required | Purpose |
-| -------- | -------- | ------- |
-| `ecr_repository_name` | no if `ecr_repository_url` is set | Existing ECR repo name |
-| `ecr_repository_url`  | no if `ecr_repository_name` is set | Existing ECR repo URL |
-| `ecr_image_tag` | no (default `latest`) | Tag ECS uses |
-| `build_and_push_image` | no (default `false`) | Build zomato-clone and push on apply |
-| `ecs_desired_count` | no (default `2`) | Number of ECS tasks to run |
-| `ecs_instance_type` | no (default `t3.small`) | EC2 instance type for the ECS cluster |
-| `ecs_instance_desired_capacity` | no (default `2`) | Desired EC2 instance count |
-| `ecs_instance_min_size` | no (default `1`) | Minimum EC2 instance count |
-| `ecs_instance_max_size` | no (default `3`) | Maximum EC2 instance count |
-| `ecs_on_demand_base_capacity` | no (default `1`) | On-demand base capacity for mixed ASG |
-| `ecs_on_demand_percentage_above_base_capacity` | no (default `50`) | Percentage of additional instances launched as on-demand |
-| `ecs_spot_allocation_strategy` | no (default `capacity-optimized`) | Spot allocation strategy for the mixed ASG |
-
 ## Modules
 
 | Module | Role |
