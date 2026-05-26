@@ -1,10 +1,12 @@
-# ECS on Fargate — existing ECR (Terraform only)
+# ECS on EC2 — existing ECR (Terraform only)
 
-Terraform provisions VPC, **ALB** (ports **80**, **3000**, optional **443**), and **ECS Fargate**. It uses an **existing ECR repository** (does not create ECR).
+Terraform provisions VPC, **ALB** (ports **80**, **3000**, optional **443**), and **ECS on EC2**. It uses an **existing ECR repository** (does not create ECR).
 
 ECS runs the image:
 
 `{your-ecr-repo-url}:{ecr_image_tag}` (default tag: `latest`).
+
+The cluster uses a mixed EC2 Auto Scaling Group with spot and on-demand capacity for cost savings.
 
 Optionally, on `terraform apply` you can clone [iamtejas23/zomato-clone](https://github.com/iamtejas23/zomato-clone), build, and push to that same ECR (`build_and_push_image = true`).
 
@@ -51,6 +53,14 @@ Or import is not needed — only drop state for resources you no longer manage h
 | `ecr_repository_url`  | no if `ecr_repository_name` is set | Existing ECR repo URL |
 | `ecr_image_tag` | no (default `latest`) | Tag ECS uses |
 | `build_and_push_image` | no (default `false`) | Build zomato-clone and push on apply |
+| `ecs_desired_count` | no (default `2`) | Number of ECS tasks to run |
+| `ecs_instance_type` | no (default `t3.small`) | EC2 instance type for the ECS cluster |
+| `ecs_instance_desired_capacity` | no (default `2`) | Desired EC2 instance count |
+| `ecs_instance_min_size` | no (default `1`) | Minimum EC2 instance count |
+| `ecs_instance_max_size` | no (default `3`) | Maximum EC2 instance count |
+| `ecs_on_demand_base_capacity` | no (default `1`) | On-demand base capacity for mixed ASG |
+| `ecs_on_demand_percentage_above_base_capacity` | no (default `50`) | Percentage of additional instances launched as on-demand |
+| `ecs_spot_allocation_strategy` | no (default `capacity-optimized`) | Spot allocation strategy for the mixed ASG |
 
 ## Modules
 
@@ -58,7 +68,7 @@ Or import is not needed — only drop state for resources you no longer manage h
 | ------ | ---- |
 | `modules/vpc` | VPC, subnets, NAT |
 | `modules/alb` | Load balancer, listeners |
-| `modules/ecs` | Fargate cluster, service, task definition |
+| `modules/ecs` | ECS EC2 cluster, service, task definition |
 
 ## Cleanup
 

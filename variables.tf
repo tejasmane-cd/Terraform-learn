@@ -76,7 +76,47 @@ variable "ecs_memory" {
 
 variable "ecs_desired_count" {
   type    = number
+  default = 2
+}
+
+variable "ecs_instance_type" {
+  type        = string
+  description = "EC2 instance type for ECS container instances."
+  default     = "t3.small"
+}
+
+variable "ecs_instance_desired_capacity" {
+  type        = number
+  description = "Desired number of EC2 instances in the ECS cluster."
+  default     = 2
+}
+
+variable "ecs_instance_min_size" {
+  type    = number
   default = 1
+}
+
+variable "ecs_instance_max_size" {
+  type    = number
+  default = 3
+}
+
+variable "ecs_on_demand_base_capacity" {
+  type        = number
+  description = "Minimum number of on-demand instances in the mixed instances policy."
+  default     = 1
+}
+
+variable "ecs_on_demand_percentage_above_base_capacity" {
+  type        = number
+  description = "Percentage of additional instances launched as on-demand above the base capacity."
+  default     = 50
+}
+
+variable "ecs_spot_allocation_strategy" {
+  type        = string
+  description = "Spot allocation strategy for the mixed instances policy."
+  default     = "capacity-optimized"
 }
 
 variable "vpc_cidr" {

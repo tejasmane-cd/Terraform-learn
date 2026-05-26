@@ -44,6 +44,39 @@ variable "desired_count" {
   default = 1
 }
 
+variable "ecs_instance_type" {
+  type        = string
+  description = "EC2 instance type for ECS container instances."
+}
+
+variable "ecs_instance_desired_capacity" {
+  type        = number
+  description = "Desired number of EC2 instances in the ECS cluster."
+}
+
+variable "ecs_instance_min_size" {
+  type = number
+}
+
+variable "ecs_instance_max_size" {
+  type = number
+}
+
+variable "ecs_on_demand_base_capacity" {
+  type        = number
+  description = "Minimum number of on-demand instances in the mixed instances policy."
+}
+
+variable "ecs_on_demand_percentage_above_base_capacity" {
+  type        = number
+  description = "Percentage of additional instances launched as on-demand above the base capacity."
+}
+
+variable "ecs_spot_allocation_strategy" {
+  type        = string
+  description = "Spot allocation strategy for the mixed instances policy."
+}
+
 variable "target_group_arn" {
   type = string
 }

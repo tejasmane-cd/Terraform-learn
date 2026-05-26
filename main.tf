@@ -52,16 +52,23 @@ module "ecs" {
 
   depends_on = [module.alb, null_resource.push_app_image]
 
-  name_prefix           = var.name_prefix
-  vpc_id                = module.vpc.vpc_id
-  private_subnet_ids    = module.vpc.private_subnet_ids
-  aws_region            = var.aws_region
-  container_image       = local.container_image
-  container_port        = var.container_port
-  cpu                   = var.ecs_cpu
-  memory                = var.ecs_memory
-  desired_count         = var.ecs_desired_count
-  target_group_arn      = module.alb.target_group_arn
-  alb_security_group_id = module.alb.security_group_id
-  tags                  = var.tags
+  name_prefix                                  = var.name_prefix
+  vpc_id                                       = module.vpc.vpc_id
+  private_subnet_ids                           = module.vpc.private_subnet_ids
+  aws_region                                   = var.aws_region
+  container_image                              = local.container_image
+  container_port                               = var.container_port
+  cpu                                          = var.ecs_cpu
+  memory                                       = var.ecs_memory
+  desired_count                                = var.ecs_desired_count
+  target_group_arn                             = module.alb.target_group_arn
+  alb_security_group_id                        = module.alb.security_group_id
+  ecs_instance_type                            = var.ecs_instance_type
+  ecs_instance_desired_capacity                = var.ecs_instance_desired_capacity
+  ecs_instance_min_size                        = var.ecs_instance_min_size
+  ecs_instance_max_size                        = var.ecs_instance_max_size
+  ecs_on_demand_base_capacity                  = var.ecs_on_demand_base_capacity
+  ecs_on_demand_percentage_above_base_capacity = var.ecs_on_demand_percentage_above_base_capacity
+  ecs_spot_allocation_strategy                 = var.ecs_spot_allocation_strategy
+  tags                                         = var.tags
 }
